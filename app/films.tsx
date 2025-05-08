@@ -1,6 +1,8 @@
+import FilmItem from '@/components/FilmItem';
+import { ListEmptyComponent } from '@/components/ListEmptyComponents';
+import { COLORS } from '@/constants/colors';
 import { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
-import { COLORS } from '../constants/colors';
+import { FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
 import { Film } from '../types/interface';
 
 const Page=()=>{
@@ -23,23 +25,33 @@ const Page=()=>{
         }
     };
         useEffect(()=>{
-            fetchFilms();
+           fetchFilms();
         },[]);
 
         const renderItem=({item}:{item:Film})=>{
             return(
-                <View>
+                <View >
                     <Text style={{color:'#fff'}}>{item.title}</Text>
                 </View>
             )
+        }
+        const onRefresh=()=>{
+            setRefreshing(true);
+            fetchFilms();
         }
    
     return(
         <View style={styles.container}>
          <FlatList
+        renderItem={({item})=> <FilmItem item={item} />}
          data={films}
          keyExtractor={(item)=>item.episode_id.toString()}
-         renderItem={renderItem} />
+         refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={fetchFilms} tintColor={COLORS.text} />
+         }
+         ListEmptyComponent={<ListEmptyComponent loading={loading} message="No films found"/>}
+         
+         />
             <Text>Films</Text>   
         </View>
     )
@@ -50,6 +62,6 @@ export default Page;
 const styles=StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor:COLORS.Background,
+        backgroundColor:COLORS.containerBackground,
     }
 })
