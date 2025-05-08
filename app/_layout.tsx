@@ -1,29 +1,48 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/useColorScheme';
-
+import { COLORS } from "@/constants/colors";
+import { Ionicons } from '@expo/vector-icons';
+import { Tabs } from "expo-router";
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
-  }
-
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <Tabs screenOptions={{
+      headerShadowVisible:false,
+      headerStyle: {
+        backgroundColor: COLORS.Background,
+      },
+      headerTintColor: COLORS.text,
+      headerTitleStyle: {
+        fontWeight: 'bold'
+      },
+      tabBarStyle: {
+        backgroundColor: COLORS.Background,
+        borderTopColor:COLORS.text,
+        borderTopWidth:1,
+      },
+      tabBarActiveTintColor:COLORS.text,
+      tabBarInactiveTintColor:COLORS.inactive,
+      
+    }}>
+      
+ <Tabs.Screen name="films" options={{ 
+        title:'All Films',
+        tabBarLabel:'Films',
+        tabBarIcon: ({color, size}) => (<Ionicons name="film-outline" size={size} color={color} />)
+      }} />
+
+<Tabs.Screen name="favourites" options={{ 
+        title:'All favourites',
+        tabBarLabel:'Favourites',
+        tabBarIcon: ({color, size}) => (<Ionicons name="heart" size={size} color={color} />)
+      }} />
+
+<Tabs.Screen name="people" options={{ 
+        title:'All people',
+        tabBarLabel:'People',
+        tabBarIcon: ({color, size}) => (<Ionicons name="people" size={size} color={color} />)
+      }} />
+
+     
+      <Tabs.Screen name="index" options={{ href: null }} />
+      
+    </Tabs>
   );
 }
