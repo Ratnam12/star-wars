@@ -22,10 +22,11 @@ export default function RootLayout() {
       tabBarInactiveTintColor: COLORS.inactive,
     }}>
       <Tabs.Screen
-        name="films/index"
+        name="films"
         options={{
           title: 'All Films',
           tabBarLabel: 'Films',
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (<Ionicons name="film-outline" size={size} color={color} />)
         }}
       />

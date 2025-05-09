@@ -10,5 +10,6 @@ export interface Film{
     planets:string[];
     starships:string[];
     vehicles:string[];
+    url:string;
     
 }

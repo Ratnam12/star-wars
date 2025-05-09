@@ -15,7 +15,6 @@ const Page=()=>{
         try{
             const response= await fetch('https://swapi.py4e.com/api/films/');
             const data= await response.json();
-            console.log("🚀 ~ fetchFilms ~ data:", data);
             setFilms(data.results);
         }catch(error){
             console.error('Error fetching films:',error);
