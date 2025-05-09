@@ -1,9 +1,9 @@
 import FilmItem from '@/components/FilmItem';
 import { ListEmptyComponent } from '@/components/ListEmptyComponents';
-import { COLORS } from '@/constants/colors';
+import { COLORS } from '@/constants/Colors';
 import { useEffect, useState } from "react";
 import { FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
-import { Film } from '../types/interface';
+import { Film } from '../../types/interface';
 
 const Page=()=>{
     const [films,setFilms]=useState<Film[]>([]);
@@ -43,16 +43,18 @@ const Page=()=>{
     return(
         <View style={styles.container}>
          <FlatList
-        renderItem={({item})=> <FilmItem item={item} />}
+        
          data={films}
          keyExtractor={(item)=>item.episode_id.toString()}
+         renderItem={({item})=> <FilmItem item={item} />}
          refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={fetchFilms} tintColor={COLORS.text} />
          }
          ListEmptyComponent={<ListEmptyComponent loading={loading} message="No films found"/>}
          
+         
          />
-            <Text>Films</Text>   
+              
         </View>
     )
 }

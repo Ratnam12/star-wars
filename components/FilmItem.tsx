@@ -1,5 +1,5 @@
 
-import { COLORS } from "@/constants/colors";
+import { COLORS } from "@/constants/Colors";
 import { Film } from "@/types/interface";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -29,6 +29,7 @@ const styles=StyleSheet.create({
         fontSize:18,
         fontWeight:'bold',
         color:COLORS.text,
+        marginBottom:8
     },
     filmDeatils:{
         fontSize:14,
