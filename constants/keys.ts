@@ -1,0 +1,1 @@
+export const FAVORITE_KEY='favorite_films';

@@ -36,7 +36,7 @@ export default function RootLayout() {
         options={{
           title: 'All favourites',
           tabBarLabel: 'Favourites',
-          tabBarIcon: ({ color, size }) => (<Ionicons name="heart" size={size} color={color} />)
+          tabBarIcon: ({ color, size }) => (<Ionicons name="star" size={size} color={color} />)
         }}
       />
 
