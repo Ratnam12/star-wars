@@ -1,4 +1,3 @@
-
 import { COLORS } from "@/constants/Colors";
 import { Film } from "@/types/interface";
 import { Link } from "expo-router";
@@ -24,11 +23,16 @@ export default FilmItem;
 
 const styles=StyleSheet.create({
     FilmItem:{
-        backgroundColor:COLORS.Background,
+        backgroundColor:COLORS.containerBackground,
         padding:16,
-       marginVertical:16,
-       marginHorizontal:16,
+       marginVertical:8,
+       marginHorizontal:0,
        borderRadius:8,
+       elevation: 1,
+       shadowColor: '#000',
+       shadowOffset: { width: 0, height: 1 },
+       shadowOpacity: 0.18,
+       shadowRadius: 1.00,
 
     },
     filmTitle:{

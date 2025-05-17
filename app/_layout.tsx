@@ -45,6 +45,7 @@ export default function RootLayout() {
         options={{
           title: 'All people',
           tabBarLabel: 'People',
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (<Ionicons name="people" size={size} color={color} />)
         }}
       />
