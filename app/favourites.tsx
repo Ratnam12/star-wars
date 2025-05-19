@@ -3,6 +3,7 @@ import { FAVORITE_KEY } from "@/constants/keys";
 import { Film } from "@/types/interface";
 import Ionicon from '@expo/vector-icons/Ionicons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Haptics from 'expo-haptics';
 import { useFocusEffect } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from "react-native";
@@ -44,6 +45,7 @@ const Page = () => {
     }
 
     const removeFavorite = async (film: Film) => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
         try {
             const favorites = await AsyncStorage.getItem(FAVORITE_KEY);
             if (favorites) {
