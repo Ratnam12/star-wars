@@ -1,13 +1,30 @@
 import { COLORS } from '@/constants/Colors';
+import { STAR_WARS_ICONS } from '@/constants/starWarsIcons';
 import { PeopleApiResponse, Person } from '@/types/interface';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import * as Haptics from 'expo-haptics';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
 
 const PEOPLE_API_URL = 'https://swapi.py4e.com/api/people';
+
+type StarWarsIconName = keyof typeof STAR_WARS_ICONS;
+const iconFilenames = Object.keys(STAR_WARS_ICONS) as StarWarsIconName[];
+
+// Function to get a deterministic icon based on a string (e.g., person's URL)
+const getDeterministicIcon = (id: string): { source: any; filename: StarWarsIconName } => {
+  let hash = 0;
+  for (let i = 0; i < id.length; i++) {
+    hash = (hash << 5) - hash + id.charCodeAt(i);
+    hash |= 0; // Convert to 32bit integer
+  }
+  const index = Math.abs(hash) % iconFilenames.length;
+  const filename = iconFilenames[index];
+  return { source: STAR_WARS_ICONS[filename], filename };
+};
 
 const SkeletonItem = () => (
   <View style={styles.itemContainer}>
@@ -72,24 +89,29 @@ const Page = () => {
     }
   };
 
-  const navigateToPersonDetail = (person: Person) => {
+  const navigateToPersonDetail = (person: Person, iconFilename: StarWarsIconName) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     const urlParts = person.url.split('/');
     const id = urlParts[urlParts.length - 2];
-    router.push(`/people/${id}` as any);
+    router.push({ pathname: `/people/${id}`, params: { iconFilename } } as any);
   };
 
-  const renderItem = ({ item }: { item: Person }) => (
-    <Pressable
-      style={({ pressed }) => [styles.itemContainer, pressed && styles.itemPressed]}
-      onPress={() => navigateToPersonDetail(item)}
-    >
-      <View style={styles.itemContent}>
-        <Ionicons name="person-circle-outline" size={40} color={COLORS.text} style={styles.itemIcon} />
-        <Text style={styles.itemText}>{item.name}</Text>
-      </View>
-      <Ionicons name="chevron-forward-outline" size={24} color={COLORS.inactive} />
-    </Pressable>
-  );
+  const renderItem = ({ item }: { item: Person }) => {
+    const { source: imageSource, filename: iconFilename } = getDeterministicIcon(item.url);
+
+    return (
+      <Pressable
+        style={({ pressed }) => [styles.itemContainer, pressed && styles.itemPressed]}
+        onPress={() => navigateToPersonDetail(item, iconFilename)}
+      >
+        <View style={styles.itemContent}>
+          <Image source={imageSource} style={styles.itemImage} />
+          <Text style={styles.itemText}>{item.name}</Text>
+        </View>
+        <Ionicons name="chevron-forward-outline" size={24} color={COLORS.inactive} />
+      </Pressable>
+    );
+  };
 
   const renderFooter = () => {
     if (!loading || initialLoading) return null;
@@ -173,7 +195,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
   },
-  itemIcon: {
+  itemImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     marginRight: 15,
   },
   itemText: {
