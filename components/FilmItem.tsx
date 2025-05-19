@@ -1,14 +1,21 @@
 import { COLORS } from "@/constants/Colors";
 import { Film } from "@/types/interface";
+import * as Haptics from 'expo-haptics';
 import { Link } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 
 const FilmItem: React.FC<{item:Film}> = ({item})=>{
     const id=item.url.split('/').filter(Boolean).pop();
+    
+    const handlePress = () => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        // Navigation is handled by Link wrapping TouchableOpacity
+    };
+
     return(
         <Link href={`/films/${id}`} asChild>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handlePress}>
         <View style={styles.FilmItem}> 
             <Text style={styles.filmTitle}>{item.title}</Text>
             <Text style={styles.filmDeatils}>Episode {item.episode_id}</Text>
@@ -43,6 +50,6 @@ const styles=StyleSheet.create({
     },
     filmDeatils:{
         fontSize:14,
-        color:"#fff",
+        color:COLORS.text,
     }
 })
