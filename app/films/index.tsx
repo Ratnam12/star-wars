@@ -64,7 +64,9 @@ const Page = () => {
             <FlatList
                 data={films}
                 keyExtractor={(item) => item.episode_id.toString()}
-                renderItem={({ item }) => <FilmItem item={item} />}
+                renderItem={({ item }) => (
+                    <FilmItem item={item} />
+                )}
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={COLORS.text} />
                 }

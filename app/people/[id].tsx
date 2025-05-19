@@ -1,11 +1,14 @@
 import { COLORS } from '@/constants/Colors';
+import { STAR_WARS_ICONS } from '@/constants/starWarsIcons';
 import { Person } from '@/types/interface';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
+
+type StarWarsIconName = keyof typeof STAR_WARS_ICONS;
 
 // Skeleton Detail Row Component
 const SkeletonDetailRow = () => (
@@ -30,7 +33,7 @@ const SkeletonPersonDetailPage = () => (
 );
 
 const PersonDetailPage = () => {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, iconFilename } = useLocalSearchParams<{ id: string; iconFilename?: StarWarsIconName }>();
   const [person, setPerson] = useState<Person | null>(null);
   const [loading, setLoading] = useState<boolean>(true); // This will now represent initial loading for skeleton
   const [error, setError] = useState<string | null>(null);
@@ -87,6 +90,10 @@ const PersonDetailPage = () => {
     );
   }
 
+  const personIconSource = iconFilename && STAR_WARS_ICONS[iconFilename] 
+    ? STAR_WARS_ICONS[iconFilename] 
+    : require('@/assets/images/icon.png'); // Fallback icon
+
   const DetailRow = ({ label, value, iconName }: { label: string; value: string | number; iconName?: keyof typeof Ionicons.glyphMap }) => (
     <View style={styles.detailItemContainer}>
       {iconName && <Ionicons name={iconName} size={22} color={COLORS.text} style={styles.detailIcon} />}
@@ -98,7 +105,7 @@ const PersonDetailPage = () => {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.scrollContentContainer}>
       <View style={styles.headerSection}>
-        <Ionicons name="person-circle-outline" size={80} color={COLORS.text} />
+        <Image source={personIconSource} style={styles.avatarImage} />
         <Text style={styles.name}>{person.name}</Text>
       </View>
 
@@ -134,6 +141,12 @@ const styles = StyleSheet.create({
   headerSection: {
     alignItems: 'center',
     marginBottom: 25,
+  },
+  avatarImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    marginBottom: 10,
   },
   name: {
     fontSize: 26,
