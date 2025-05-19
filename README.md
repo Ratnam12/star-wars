@@ -63,7 +63,3 @@ test: Testing-related changes
 docs: Documentation updates
 refactor: Code refactoring
 ```
-
----
-
-Let me know if you want this as a `README.md` file!
